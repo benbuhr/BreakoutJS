@@ -21,6 +21,8 @@
         var canvas = document.getElementById("myCanvas");
         var ctx = canvas.getContext("2d");
 
+        var score = 0;
+
         var ballRadius = 10;
         var x = canvas.width / 2;
         var y = canvas.height - 30;
@@ -85,6 +87,12 @@
             }
         }
 
+        function drawScore() {
+            ctx.font = "16px Arial";
+            ctx.fillStyle = "#0095DD";
+            ctx.fillText("Score: " + score, 8, 20);
+        }
+
         function collisionDetection() {
             for (c = 0; c < brickColumnCount; c++) {
                 for (r = 0; r < brickRowCount; r++) {
@@ -93,6 +101,15 @@
                         if (x > brick.x && x < brick.x + brickWidth && y > brick.y && y < brick.y + brickHeight) {
                             dy = -dy;
                             brick.status = 0;
+
+                            dx *= 1.05;
+                            dy *= 1.05;
+
+                            score++;
+                            if (score === brickRowCount * brickColumnCount) {
+                                alert("YOU WIN");
+                                document.location.reload();
+                            }
                         }
                     }
                 }
@@ -104,6 +121,7 @@
             drawBricks();
             drawBall();
             drawPaddle();
+            drawScore();
             collisionDetection();
 
             if (x + dx < ballRadius || x + dx > canvas.width - ballRadius) {
@@ -116,7 +134,7 @@
                 if (x > paddleX && x < paddleX + paddleWidth) {
                     dy = -dy;
                 } else {
-                    //alert("GAME OVER NOOB!");
+                    alert("GAME OVER NOOB!");
                     document.location.reload();
                 }
             }
